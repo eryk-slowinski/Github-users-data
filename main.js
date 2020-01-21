@@ -17,17 +17,28 @@ async function getData(user) {
     displayData(data);
 }
 
-function displayData(data) {
-    image.src = data.avatar_url;
-    image.style.border = '1px solid rgb(27, 26, 26, .7)';
-    userInfo.textContent = `User name: ${data.name}`;
-    idInfo.textContent = `User ID: ${data.id}`;
-    locationInfo.textContent = `User location: ${data.location}`;
-    bioInfo.textContent = `User bio: ${data.bio}`;
-    publicRepos.textContent = `User public repositories: ${data.public_repos}`;
-    userFollowers.textContent = `User followers: ${data.followers}`;
-    accountCreated.textContent = `Account created at: ${data.created_at}`;
+function handleError(error) {
+    console.log(error);
+    clearData();
     spinner.style.opacity = '0';
+    image.src = 'img/404-error-not-found.png';
+    userInfo.textContent = 'Check if you typed correct user name.';
+    userInfo.style.margin = 'auto';
+}
+
+function displayData(data) {
+    if (!data.message) {
+        image.src = data.avatar_url;
+        image.style.border = '1px solid rgb(27, 26, 26, .7)';
+        userInfo.textContent = `User name: ${data.name}`;
+        idInfo.textContent = `User ID: ${data.id}`;
+        locationInfo.textContent = `User location: ${data.location}`;
+        bioInfo.textContent = `User bio: ${data.bio}`;
+        publicRepos.textContent = `User public repositories: ${data.public_repos}`;
+        userFollowers.textContent = `User followers: ${data.followers}`;
+        accountCreated.textContent = `Account created at: ${data.created_at}`;
+        spinner.style.opacity = '0';
+    } else handleError();
 }
 
 function clearData() {
@@ -42,18 +53,9 @@ function clearData() {
     accountCreated.textContent = '';
 }
 
-function handleError(error) {
-    console.log(error);
-    clearData();
-    spinner.style.opacity = '0';
-    image.src = 'img/404-error-not-found.png';
-    userInfo.textContent = 'Check if you typed correct user name.';
-    userInfo.style.margin = 'auto';
-}
-
 btnSubmit.addEventListener('click', (e) => {
     e.preventDefault();
     spinner.style.opacity = '1';
-    getData(inputField.value).catch(handleError);
+    getData(inputField.value);
     clearData();
 })
