@@ -1,0 +1,11 @@
+body {
+    background-color: #666;
+}
+
+div.user {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+}
